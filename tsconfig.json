@@ -1,0 +1,13 @@
+{
+  "references": [
+    {
+      "path": "./frontend"
+    },
+    {
+      "path": "./contract"
+    }
+  ],
+  "files": [],
+  "include": [],
+  "exclude": ["**/node_modules"]
+}

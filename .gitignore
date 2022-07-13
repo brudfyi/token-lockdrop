@@ -1,0 +1,8 @@
+.env
+node_modules
+.eslintcache
+yarn-error.log
+!jest/.env
+# playwright-report/
+# playwright-results/
+# .terraform/

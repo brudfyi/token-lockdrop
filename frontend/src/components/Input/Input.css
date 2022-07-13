@@ -1,0 +1,54 @@
+.input {
+  font-size: large;
+  text-align: right;
+  font-weight: 600;
+  background-color: transparent;
+  padding: 16px;
+  min-width: calc(300px - 32px); /* minus horizontal padding */
+  border-radius: 16px;
+  border-width: 0px;
+  box-shadow: rgb(0 0 0 / 25%) 0px 1px 10px;
+  display: inline-flex;
+  align-items: center;
+}
+
+input::placeholder {
+  color: darkgray;
+  opacity: 1;
+}
+
+.pr-4 {
+  padding-right: 32px;
+}
+
+.select-container {
+  position: relative;
+}
+
+.select-container::after {
+  content: '▼';
+  font-size: 1rem;
+  top: 18px;
+  right: 10px;
+  position: absolute;
+}
+
+.select-loading {
+  display: flex;
+  justify-content: flex-end;
+}
+
+select {
+  width: 300px;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.label-container {
+  margin-bottom: 8px;
+}
+
+.disabled-input {
+  cursor: not-allowed;
+  color: darkgray;
+}

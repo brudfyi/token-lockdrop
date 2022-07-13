@@ -1,0 +1,11 @@
+{
+  "extends": "../tsconfig.common.json",
+  "references": [],
+  "compilerOptions": {
+    "lib": ["esnext"],
+    "rootDir": "src",
+    "skipLibCheck": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
+}

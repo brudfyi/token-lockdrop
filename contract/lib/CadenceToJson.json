@@ -1,0 +1,30 @@
+{
+  "transactions": {
+    "lock": "import FlowTokenTimeLockV6 from 0xFlowTokenTimeLockV6\nimport FlowToken from 0xFlowToken\n\ntransaction(amount: UFix64, lockDuration: Int, lockWeight: Int) {\n  prepare(acct: AuthAccount) {\n\n    if acct.borrow<&FlowTokenTimeLockV6.TokenTimeLockManager>(from: FlowTokenTimeLockV6.lockedTokenStoragePath) != nil {\n      panic(\"Locked token vault already exists\")\n    }\n\n    let flowVaultRef = acct.borrow<&FlowToken.Vault>(from: /storage/flowTokenVault)\n        ?? panic(\"Could not borrow a reference to the owner's vault\")\n    let temporaryVault <- flowVaultRef.withdraw(amount: amount) as! @FlowToken.Vault\n\n    acct.save(\n      <-FlowTokenTimeLockV6.createFlowTokenTimeLockManager(),\n      to: FlowTokenTimeLockV6.lockedTokenStoragePath\n    )\n\n    let lockedVaultRef = acct.borrow<&FlowTokenTimeLockV6.TokenTimeLockManager>(from: FlowTokenTimeLockV6.lockedTokenStoragePath)\n        ?? panic(\"Could not borrow a reference to the owner's locked vault\")\n\n    lockedVaultRef.lock(vault: <-temporaryVault, lockDuration: lockDuration, lockWeight: lockWeight)\n\n    acct.link<&FlowTokenTimeLockV6.TokenTimeLockManager{FlowTokenTimeLockV6.TokenTimeLockManagerPublic}>(\n        FlowTokenTimeLockV6.lockedTokensPublicPath,\n        target: FlowTokenTimeLockV6.lockedTokenStoragePath\n    )\n  }\n}\n",
+    "transferFlow": "// This transaction is a template for a transaction that\n// could be used by anyone to send tokens to another account\n// that has been set up to receive tokens.\n//\n// The withdraw amount and the account from getAccount\n// would be the parameters to the transaction\nimport FungibleToken from 0xFungibleToken\nimport FlowToken from 0xFlowToken\n\ntransaction(amount: UFix64, to: Address) {\n\n    // The Vault resource that holds the tokens that are being transferred\n    let sentVault: @FungibleToken.Vault\n\n    prepare(signer: AuthAccount) {\n\n        // Get a reference to the signer's stored vault\n        let vaultRef = signer.borrow<&FlowToken.Vault>(from: /storage/flowTokenVault)\n\t\t\t?? panic(\"Could not borrow reference to the owner's Vault!\")\n\n        // Withdraw tokens from the signer's stored vault\n        self.sentVault <- vaultRef.withdraw(amount: amount)\n    }\n\n    execute {\n\n        // Get a reference to the recipient's Receiver\n        let receiverRef =  getAccount(to)\n            .getCapability(/public/flowTokenReceiver)\n            .borrow<&{FungibleToken.Receiver}>()\n\t\t\t?? panic(\"Could not borrow receiver reference to the recipient's Vault\")\n\n        // Deposit the withdrawn tokens in the recipient's receiver\n        receiverRef.deposit(from: <-self.sentVault)\n    }\n}\n",
+    "unlock": "import FlowTokenTimeLockV6 from 0xFlowTokenTimeLockV6\nimport FlowToken from 0xFlowToken\n\ntransaction() {\n  prepare(acct: AuthAccount) {\n    let lockedVaultRef = acct.borrow<&FlowTokenTimeLockV6.TokenTimeLockManager>(from: FlowTokenTimeLockV6.lockedTokenStoragePath)\n        ?? panic(\"Could not borrow a reference to the owner's locked vault\")\n\n    lockedVaultRef.unlock()\n  }\n}\n"
+  },
+  "scripts": {
+    "getAddressLockWeights": "import FlowTokenTimeLockV6 from 0xFlowTokenTimeLockV6\n\npub fun main(): {String: AnyStruct} {\n  return {\n    \"weight\": FlowTokenTimeLockV6.getAddressLockWeights()\n  }\n}\n",
+    "getLockContractConfig": "import FlowTokenTimeLockV6 from 0xFlowTokenTimeLockV6\n\npub fun main(): {String: AnyStruct} {\n  return {\n    \"lockDurationsRewardFactors\": FlowTokenTimeLockV6.lockDurationsRewardFactors,\n    \"lockPeriodStart\": FlowTokenTimeLockV6.lockPeriodStart,\n    \"minLockableFlowAmount\": FlowTokenTimeLockV6.minLockableFlowAmount\n  }\n}\n",
+    "getLockContractStats": "import FlowTokenTimeLockV6 from 0xFlowTokenTimeLockV6\n\npub fun main(): {String: AnyStruct} {\n  return {\n    \"totalLockedFlow\": FlowTokenTimeLockV6.totalLockedFlowAmount,\n    \"totalLockedWeight\": FlowTokenTimeLockV6.totalLockedWeight\n  }\n}\n",
+    "getLockedInfo": "import FlowTokenTimeLockV6 from 0xFlowTokenTimeLockV6\n\npub fun main(acct: Address): {String: AnyStruct} {\n  let lockedTokensRef = getAccount(acct)\n      .getCapability(FlowTokenTimeLockV6.lockedTokensPublicPath)\n      .borrow<&FlowTokenTimeLockV6.TokenTimeLockManager{FlowTokenTimeLockV6.TokenTimeLockManagerPublic}>()\n\n  return {\n    \"lockedUntil\": lockedTokensRef?.lockedUntil,\n    \"weight\": FlowTokenTimeLockV6.getAddressLockWeight(address: acct),\n    \"duration\": lockedTokensRef?.lockDuration,\n    \"balance\": lockedTokensRef?.getBalance(),\n    \"amount\": lockedTokensRef?.lockAmount,\n    \"lockedAt\": lockedTokensRef?.lockedAt,\n    \"unlockedAt\": lockedTokensRef?.unlockedAt\n  }\n}\n"
+  },
+  "vars": {
+    "emulator": {
+      "0xFungibleToken": "0xee82856bf20e2aa6",
+      "0xFlowToken": "0x0ae53cb6e3f42a79",
+      "0xFlowTokenTimeLockV6": "0xf8d6e0586b0a20c7"
+    },
+    "testnet": {
+      "0xFungibleToken": "0x9a0766d93b6608b7",
+      "0xFlowToken": "0x7e60df042a9c0868",
+      "0xFlowTokenTimeLockV6": "0xcc1a0d9c99750953"
+    },
+    "mainnet": {
+      "0xFungibleToken": "0xf233dcee88fe0abe",
+      "0xFlowToken": "0x1654653399040a61",
+      "0xFlowTokenTimeLockV6": null
+    }
+  }
+}

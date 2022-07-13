@@ -1,0 +1,39 @@
+.content-block {
+  display: flex;
+  align-self: stretch;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 40px;
+  border-radius: 32px;
+  border-width: 0px;
+  box-shadow: rgb(0 0 0 / 15%) 0px 1px 20px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.value {
+  width: 300px;
+}
+
+.value-mb {
+  margin-bottom: 20px;
+}
+
+.action-col {
+  display: flex;
+  flex-direction: column;
+  align-self: flex-end;
+}
+
+.ml-1 {
+  margin-left: 8px;
+}
+
+.mr-4 {
+  margin-right: 32px;
+}

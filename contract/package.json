@@ -1,0 +1,43 @@
+{
+  "name": "contract",
+  "version": "0.1.0",
+  "main": "lib/CadenceToJson.json",
+  "license": "MIT",
+  "scripts": {
+    "emulator:run": "flow project start-emulator --config-path=../flow.json --verbose",
+    "emulator:deploy": "cd ..; flow project deploy -n emulator --update",
+    "emulator:create:user": "cd ..; flow accounts create --key \"ef454a00132b1152f7b58d7a41e1c5f1be3a0dfea8c8cef5df799a49b6f5dc6efb587d4c835e39ed126016b8adcd5655b265aa14975b39383d813010d99ce9ee\" --sig-algo \"ECDSA_secp256k1\" --hash-algo \"SHA2_256\"",
+    "emulator:fund:user": "cd ..; flow transactions send ./contract/src/transactions/transferFlow.cdc 10.0 0x01cf0e2f2f715450 --signer emulator-account",
+    "emulator:start": "concurrently 'yarn emulator:run' 'sleep 4 && yarn emulator:deploy' 'sleep 8 && yarn emulator:create:user' 'sleep 12 && yarn emulator:fund:user'",
+    "emulator:tx:lock": "yarn emulator:deploy; cd ..; flow transactions send ./contract/src/transactions/lock.cdc 1.0 60 10000 --signer emulator-user",
+    "emulator:tx:unlock": "yarn emulator:deploy; cd ..; flow transactions send ./contract/src/transactions/unlock.cdc --signer emulator-user",
+    "emulator:script:get:account": "cd ..; flow accounts get 0x01cf0e2f2f715450",
+    "emulator:script:get:locked": "yarn emulator:deploy; cd ..; flow scripts execute ./contract/src/scripts/getLockedInfo.cdc 0x01cf0e2f2f715450",
+    "build": "node build.js",
+    "testnet:contract:deploy": "cd ..; flow project deploy --network=testnet --update",
+    "test:unit": "jest --runInBand"
+  },
+  "devDependencies": {
+    "cadence-to-json": "^1.0.3",
+    "flow-js-testing": "https://github.com/refi93/flow-js-testing/releases/download/v0.2.3-alpha7/flow-js-testing-0.2.3-alpha.7.tgz",
+    "jest": "^28.1.1",
+    "ts-jest": "^28.0.4"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "verbose": true,
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ],
+    "preset": "ts-jest"
+  },
+  "description": "This folder contains the Flow smart contract used to let the users lock their FLOW tokens in exchange for reward tokens (to be distributed off-chain after the lock drop ends)",
+  "directories": {
+    "lib": "lib"
+  },
+  "keywords": [],
+  "author": "",
+  "dependencies": {
+    "bignumber.js": "^9.0.2"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "extends": "../tsconfig.common.json",
+  "references": [],
+  "compilerOptions": {
+    "lib": ["dom", "esnext"],
+    "jsx": "react",
+    "skipLibCheck": true,
+    "module": "ES2022"
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
+}

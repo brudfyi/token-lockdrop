@@ -1,0 +1,72 @@
+{
+  "emulators": {
+    "default": {
+      "port": 3569,
+      "serviceAccount": "emulator-account"
+    }
+  },
+  "contracts": {
+    "FungibleToken": {
+      "source": "./contract/src/contracts/standard/FungibleToken.cdc",
+      "aliases": {
+        "testnet": "0x9a0766d93b6608b7",
+        "emulator": "0xee82856bf20e2aa6",
+        "mainnet": "0xf233dcee88fe0abe"
+      }
+    },
+    "FlowToken": {
+      "source": "./contract/src/contracts/standard/FlowToken.cdc",
+      "aliases": {
+        "testnet": "0x7e60df042a9c0868",
+        "emulator": "0x0ae53cb6e3f42a79",
+        "mainnet": "0x1654653399040a61"
+      }
+    },
+    "FlowTokenTimeLockV6": {
+      "source": "./contract/src/contracts/FlowTokenTimeLock.cdc",
+      "aliases": {
+        "testnet": "0xcc1a0d9c99750953",
+        "emulator": "0xf8d6e0586b0a20c7"
+      }
+    }
+  },
+  "networks": {
+    "emulator": "127.0.0.1:3569",
+    "mainnet": "access.mainnet.nodes.onflow.org:9000",
+    "testnet": "access.testnet.nodes.onflow.org:9000"
+  },
+  "accounts": {
+    "emulator-account": {
+      "address": "f8d6e0586b0a20c7",
+      "key": "9111e45d6841e59c9e245a378fbd61df4261e1880eeacfdc035fae7b3fb8bf7e"
+    },
+    "emulator-user": {
+      "address": "01cf0e2f2f715450",
+      "key": {
+        "type": "hex",
+        "index": 0,
+        "signatureAlgorithm": "ECDSA_secp256k1",
+        "hashAlgorithm": "SHA2_256",
+        "privateKey": "2a9e7d59af693f68cf7c8ae279a6ec63a6214c105a465739289d4fc0df1a075e"
+      }
+    },
+    "testnet-admin": {
+      "address": "cc1a0d9c99750953",
+      "key": {
+        "type": "hex",
+        "index": 0,
+        "signatureAlgorithm": "ECDSA_P256",
+        "hashAlgorithm": "SHA3_256",
+        "privateKey": "${TESTNET_TOKEN_TIME_LOCK_ADMIN}"
+      }
+    }
+  },
+  "deployments": {
+    "emulator": {
+      "emulator-account": ["FlowTokenTimeLockV6"]
+    },
+    "testnet": {
+      "testnet-admin": ["FlowTokenTimeLockV6"]
+    }
+  }
+}

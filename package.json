@@ -1,0 +1,50 @@
+{
+  "name": "brud",
+  "version": "1.0.0",
+  "description": "Brud monorepo",
+  "main": "index.js",
+  "repository": "https://github.com/vacuumlabs/brud.git",
+  "author": "Vacuumlabs",
+  "license": "MIT",
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "frontend",
+      "contract"
+    ]
+  },
+  "engines": {
+    "node": "16.10",
+    "npm": ">=6.x",
+    "yarn": ">=1.21.3"
+  },
+  "scripts": {
+    "copy-env": "yarn workspace frontend copy-env",
+    "prettier:check": "prettier --check .",
+    "prettier": "prettier --write .",
+    "dev": "yarn workspace frontend start"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^5.16.4",
+    "@types/jest": "^28.1.1",
+    "@typescript-eslint/eslint-plugin": "^5.27.0",
+    "@typescript-eslint/parser": "^5.27.0",
+    "concurrently": "^7.2.1",
+    "dotenv": "^16.0.1",
+    "eslint": "^8.17.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-config-vacuumlabs": "^2.0.14",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react": "^7.30.0",
+    "prettier": "^2.6.2",
+    "typescript": "^4.7.3"
+  },
+  "resolutions": {
+    "**/react-scripts/@svgr/**/nth-check": "^2",
+    "**/flow-js-testing/flow-cadut/simple-git": "^3"
+  },
+  "dependencies": {
+    "fs": "^0.0.1-security"
+  }
+}
